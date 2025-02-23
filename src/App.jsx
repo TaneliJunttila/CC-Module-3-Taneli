@@ -4,7 +4,7 @@ import negative from './assets/Negative.png'
 import neutral from './assets/Neutral.png'
 import error from './assets/error.png'
 import not_rated from './assets/not_rated.png'
-
+import './App.css'
 function App() {
   const [resultState, setResultState] = useState('nothing_sent')
   const [queryDisplayState, setQueryDisplayState] = useState('')
