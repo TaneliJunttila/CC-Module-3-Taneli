@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<body id="all-container">
+<div style="text-align:center;">
+    <h1>Teachable machine test Taneli Junttila</h1>
+    <div>
+        Teachable Machine Image Model
+    </div>
+    <button type="button" onclick="init()">
+        Start
+    </button>
+    <div>
+        <p>Set alert time in seconds (you can change this while active too)</p>
+        <input type="number" id="timestampMax" value="0">
+    </div>
+    <div id="webcam-container">
+    
+    </div>
+    <div id="label-container">
+    
+    </div>
+    <div id="timer-container">
+
+    </div>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+        // basic html template from w3schools: https://www.w3schools.com/html/html_basic.asp
+        // More API functions here:
+        // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+    
+        // the link to your model provided by Teachable Machine export panel
+        const URL = "https://teachablemachine.withgoogle.com/models/W4An7OBXH/";
+    
+        let model, webcam, maxPredictions, timerContainer;
+    
+        var cupInFrameCount = 0;
+        const cupInFrameCountMax = 5;
+    
+        var currentTS = 0;
+        var lastCupTS = 0;
+        var cupTSMax = 0;
+        var cupTSOverdue = false;
+
+        var alertActive = false;
+    
+        // Load the image model and setup the webcam
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+    
+            // load the model and metadata
+            // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+            // or files from your local hard drive
+            // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+            lastCupTS = Math.floor(Date.now()/1000);
+    
+            // Convenience function to setup a webcam
+            const flip = true; // whether to flip the webcam
+            webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+            await webcam.setup(); // request access to the webcam
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+    
+            // append elements to the DOM
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            timerContainer = document.getElementById("timer-container");
+        }
+    
+        async function loop() {
+            webcam.update(); // update the webcam frame
+            await predict();
+            await checkCupTS();
+            alert();
+            window.requestAnimationFrame(loop);
+        }
+    
+        // run the webcam image through the image model
+        async function predict() {
+            // predict can take in an image, video or canvas html element
+            const prediction = await model.predict(webcam.canvas);
+            for (let i = 0; i < maxPredictions; i++) {
+                /*
+                const classPrediction =
+                    prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                labelContainer.childNodes[i].innerHTML = classPrediction;
+                */
+                if (prediction[i].className == "Cup" && prediction[i].probability.toFixed(2) == 1) {
+                    cupInFrameCount++;
+                    if (cupInFrameCount >= cupInFrameCountMax) {
+                        lastCupTS = Math.floor(Date.now()/1000);
+                    }
+    
+                } else if (prediction[i].className == "Cup" && prediction[i].probability.toFixed(2) < 1) {
+                    cupInFrameCount = 0;
+                }
+    
+            }
+        }
+    
+        async function checkCupTS() {
+            currentTS = Math.floor(Date.now()/1000);
+            cupTSMax = document.getElementById("timestampMax").value;
+            /*
+            Github copilot used in checking why currentTS - lastCupTS was NaN, I forgot ()
+            */
+            timerContainer.innerHTML = "Last cup seen: " + (currentTS - lastCupTS) + " seconds ago";
+            if (currentTS - lastCupTS > cupTSMax) {
+                cupTSOverdue = true;
+            }
+            else {
+                cupTSOverdue = false;
+            }
+        }
+
+        async function alert() {
+            if (cupTSOverdue && !alertActive) {
+                alertActive = true;
+                document.getElementById("all-container").style.backgroundColor = "red";
+                // copilot suggested this line below when I typed "await" and it was correct
+                await new Promise(r => setTimeout(r, 1000));
+                document.getElementById("all-container").style.backgroundColor = "white";
+                await new Promise(r => setTimeout(r, 1000));
+                alertActive = false;
+            }
+        }
+</script>
+</html>
+
