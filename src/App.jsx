@@ -4,30 +4,50 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [resultState, setResultState] = useState('nothing_sent')
+  const [queryDisplayState, setQueryDisplayState] = useState('')
 
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <ResultContainer resultState={resultState} queryDisplayState={queryDisplayState} />
+        <InputContainer setResultState={setResultState} setQueryDisplayState={setQueryDisplayState}/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+    </>
+  )
+}
+function ResultContainer({resultState, queryDisplayState}) {
+  return (
+    <>
+      <div>
+        <h1>Result:</h1>
+        <p>{resultState}</p>
+        <p>{queryDisplayState}</p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    </>
+  )
+}
+
+function InputContainer({setResultState, setQueryDisplayState}) {
+  const [inputState, setInputState] = useState('')
+
+  function handleTextAreaChange(e) {
+    setInputState(e.target.value)
+  }
+
+  async function sendQuery() {
+    setQueryDisplayState(inputState)
+    setResultState("sending...")
+    await new Promise( r => setTimeout(r, 3000))
+    setResultState("positive")
+  }
+  return (
+    <>
+      <div>
+        <h1>Input</h1>
+        <input type='text' value={inputState} onChange={handleTextAreaChange}></input>
+        <button onClick={sendQuery}>Send</button>
+      </div>
     </>
   )
 }
