@@ -1,36 +1,56 @@
-#root {
-  width: 100%;
-  height: auto;  
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 .logo {
   height: 12em;
   padding: 1.5em;
   max-width: 100%;
   height: auto;
 }
-.appRoot{
-    max-width: 100%;
+.appRoot {
+  display: grid;
+  grid-template-columns: 
+  'header'
+  'queryText'
+  'resultText'
+  'image'
+  'textInput'
+  'inputButton';
+  gap: 10px 10px;
+  justify-items: center;
+  
 }
-
+.appRoot > div {
+  
+  text-align: center;
+  
+}
 .headline{
+  
 }
 
 .resultText{
+  
+
+}
+.queryText{
+  
+}
+.queryContainer{
+  overflow-wrap: anywhere;
+  height: max-content;
+  
 
 }
 .image{
-
+  max-width: 30%;
 }
 .resultText{
+  
 
 }
 .textInput{
+  
 
 }
 .inputButton{
+  
   
 }

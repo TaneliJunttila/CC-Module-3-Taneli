@@ -11,11 +11,11 @@ function App() {
 
   return (
     <>
-      <div className='appRoot'>
+      <div className="appRoot">
         <div className='headline'>
           <h1>Sentiment analysis frontend</h1>
         </div>
-        <div className='resultText'>
+        <div className='queryText'>
           <ResultQueryText resultState={resultState} queryDisplayState={queryDisplayState}></ResultQueryText>
         </div>
         <div className='image'>
@@ -44,9 +44,15 @@ function ResultQueryText({resultState, queryDisplayState}) {
   else {
     content = (
       <>
-        <h3>
-          Sentiment for query: "{queryDisplayState}" was:
-        </h3>
+        <p>
+          Sentiment for query:
+        </p>
+        <p className='queryContainer'>
+        "{queryDisplayState}"
+        </p>
+        <p>
+          was:
+        </p>
       </>
     )
   }
@@ -129,9 +135,7 @@ function InputContainer({setResultState, setQueryDisplayState}) {
     const sentimenList = [
       "Positive",
       "Neutral",
-      "Negative",
-      "nothing_sent",
-      "error"
+      "Negative"
     ]
     // https://www.w3schools.com/jsref/jsref_random.asp
     const x = Math.floor(Math.random() * sentimenList.length)
