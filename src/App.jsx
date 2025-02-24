@@ -44,15 +44,9 @@ function ResultQueryText({resultState, queryDisplayState}) {
   else {
     content = (
       <>
-        <p>
+        <h3>
           Sentiment for query:
-        </p>
-        <p className='queryContainer'>
-        "{queryDisplayState}"
-        </p>
-        <p>
-          was:
-        </p>
+        </h3>
       </>
     )
   }
