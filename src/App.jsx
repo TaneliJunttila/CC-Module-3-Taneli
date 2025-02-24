@@ -15,16 +15,16 @@ function App() {
         <div className='headline'>
           <h1>Sentiment analysis frontend</h1>
         </div>
-        <div className='queryText'>
-          <ResultQueryText resultState={resultState} queryDisplayState={queryDisplayState}></ResultQueryText>
-        </div>
         <div className='image'>
           <ResultImage resultState={resultState}></ResultImage>
         </div>
+        <div className='queryText'>
+          <ResultQueryText resultState={resultState} queryDisplayState={queryDisplayState}></ResultQueryText>
+        </div>
+        <InputContainer setResultState={setResultState} setQueryDisplayState={setQueryDisplayState}/>
         <div className='resultText'>
           <ResultText resultState={resultState}></ResultText>
         </div>
-        <InputContainer setResultState={setResultState} setQueryDisplayState={setQueryDisplayState}/>
       </div>
     </>
   )
@@ -62,7 +62,7 @@ function ResultText({resultState}) {
       </>
     )
   }
-  if(resultState == "nothing_sent") {
+  else if(resultState == "nothing_sent") {
     content = (
       <>
         <h2>Nothing sent</h2>
@@ -72,7 +72,7 @@ function ResultText({resultState}) {
   else {
     content = (
       <>
-        <h2>{resultState}</h2>
+        <h2>is {resultState}</h2>
       </>
     )
   }

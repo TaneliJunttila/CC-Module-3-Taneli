@@ -4,63 +4,128 @@
   width: 45%;;
   height: auto;
 }
-.appRoot {
-  display: grid;
-  grid-template-columns: 
-  'header'
-  'queryText'
-  'resultText'
-  'image'
-  'textInput'
-  'inputButton';
-  gap: 10px 10px;
-  justify-items: center;
+@media only screen and (max-width: 600px) {
+  .appRoot {
+    display: grid;
+    grid-template-columns: 
+    'header'
+    'queryText'
+    'resultText'
+    'image'
+    'textInput'
+    'inputButton';
+    gap: 10px 10px;
+    justify-items: center;
+    
+  }
+  .appRoot > div {
+    
+    text-align: center;
+    max-height: max-content;
+    
+  }
+  .headline{
+    
+  }
   
-}
-.appRoot > div {
+  .resultText{
+    
   
-  text-align: center;
-  max-height: max-content;
+  }
+  .queryText{
+    max-width: 100%;
+    padding: 1.5em;
+  }
+  /* I have a div with a classname querytext and inside 
+  it is a h3 with the name queryContainer. The querytext div has a max size. 
+  I would like it to be so that if querycontainer text is larger 
+  than what fits the div, it would create a scroll. */
+  .queryContainer{
+    max-height: 30%;
+    overflow-wrap:anywhere;
+    overflow: scroll;
+    background-color: grey;
+    border-style: solid;
+    margin: 3%;
+  }
+  .image{
+  }
+  .resultText{
+    
   
-}
-.headline{
+  }
+  .textInput{
+    
   
+  }
+  .inputButton{
+    
+    
+  }
+
 }
 
-.resultText{
+@media only screen and (min-width: 600px) {
+  .appRoot {
+    display: grid;
+    grid-template-columns: 
+    'header header'
+    'image image'
+    'queryText queryText'
+    'textInput inputButton'
+    'resultText resultText'
+    ;
+    gap: 10px 10px;
+    justify-items: center;
+    
+  }
+  .appRoot > div {
+    
+    text-align: center;
+    max-height: max-content;
+    
+  }
+  .headline{
+    
+  }
   
+  .resultText{
+    
+  
+  }
+  .queryText{
+    max-width: 100%;
+    padding: 1.5em;
+  }
+  /* I have a div with a classname querytext and inside 
+  it is a h3 with the name queryContainer. The querytext div has a max size. 
+  I would like it to be so that if querycontainer text is larger 
+  than what fits the div, it would create a scroll. */
+  .queryContainer{
+    max-height: 30%;
+    overflow-wrap:anywhere;
+    overflow: scroll;
+    background-color: grey;
+    border-style: solid;
+    margin: 3%;
+  }
+  .image{
+  }
+  .resultText{
+    
+  
+  }
+  .textInput{
+    
+  
+  }
+  .inputButton{
+    
+    
+  }
 
 }
-.queryText{
-  max-width: 100%;
-  padding: 1.5em;
-}
-/* I have a div with a classname querytext and inside 
-it is a h3 with the name queryContainer. The querytext div has a max size. 
-I would like it to be so that if querycontainer text is larger 
-than what fits the div, it would create a scroll. */
-.queryContainer{
-  max-height: 30%;
-  overflow-wrap:anywhere;
-  overflow: scroll;
-  background-color: grey;
-  border-style: solid;
-  margin: 3%;
-}
-.image{
-}
-.resultText{
-  
 
-}
-.textInput{
-  
-
-}
-.inputButton{
-  
-  
-}
 button{
   padding: 30%;
   background-color: rgba(25, 25, 122, 0.651);
