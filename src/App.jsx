@@ -11,77 +11,112 @@ function App() {
 
   return (
     <>
-      <div>
-        <h1>Sentiment analysis frontend</h1>
-        <ResultContainer resultState={resultState} queryDisplayState={queryDisplayState} />
+      <div className='appRoot'>
+        <div className='headline'>
+          <h1>Sentiment analysis frontend</h1>
+        </div>
+        <div className='resultText'>
+          <ResultQueryText resultState={resultState} queryDisplayState={queryDisplayState}></ResultQueryText>
+        </div>
+        <div className='image'>
+          <ResultImage resultState={resultState}></ResultImage>
+        </div>
+        <div className='resultText'>
+          <ResultText resultState={resultState}></ResultText>
+        </div>
         <InputContainer setResultState={setResultState} setQueryDisplayState={setQueryDisplayState}/>
       </div>
     </>
   )
 }
 
-function ResultText({resultState, queryDisplayState}) {
-  return (
-    <>
-      <div>
-        <p>Sentiment analysis for query: "{queryDisplayState}" was:</p>
-        <h2>{resultState}</h2>
-      </div>
-    </>
-  )
+function ResultQueryText({resultState, queryDisplayState}) {
+  let content
+  if(resultState == "nothing_sent") {
+    content = (
+      <>
+        <h3>
+          Send something for sentiment analysis
+        </h3>
+      </>
+    )
+  }
+  else {
+    content = (
+      <>
+        <h3>
+          Sentiment for query: "{queryDisplayState}" was:
+        </h3>
+      </>
+    )
+  }
+  return content
 
 }
-function ResultContainer({resultState, queryDisplayState}) {
+function ResultText({resultState}) {
   let content
-  if (resultState == "nothing_sent") {
-    content = 
-    <div>
-      <p>You have not sent anything for sentiment analysis</p>
-      <img src={not_rated} className="logo"/>
-    </div>
+  if(resultState == "sending...") {
+    content = (
+      <>
+        <h2> Checking sentiment... </h2>
+      </>
+    )
   }
-  if (resultState == "sending...") {
-    content = 
-    <div>
-      <p>Checking...</p>
-      <img src={not_rated} className="logo"/>
-    </div>
+  if(resultState == "nothing_sent") {
+    content = (
+      <>
+        <h2>Nothing sent</h2>
+      </>
+    )
   }
+  else {
+    content = (
+      <>
+        <h2>{resultState}</h2>
+      </>
+    )
+  }
+  return content
+}
 
-  if (resultState == "error") {
-    content = 
-    <div>
-      <p>Looks like something went horribly wrong :(</p>
-      <img src={error} className="logo"/>
-    </div>
+function ResultImage({resultState}) {
+  let content
+  if(resultState == "Positive") {
+    content = (
+      <>
+        <img src={positive} className="logo"/>
+      </>
+    )
   }
-
-  if (resultState == "Positive") {
-    content = 
-    <div>
-      <ResultText resultState={resultState} queryDisplayState={queryDisplayState}></ResultText>
-      <img src={positive} className="logo"/>
-    </div>
+  else if(resultState == "Negative") {
+    content = (
+      <>
+        <img src={negative} className="logo"/>
+      </>
+    )
   }
-  if (resultState == "Neutral") {
-    content = 
-    <div>
-      <ResultText resultState={resultState} queryDisplayState={queryDisplayState}></ResultText>
-      <img src={neutral} className="logo"/>
-    </div>
+  else if(resultState == "Neutral") {
+    content = (
+      <>
+        <img src={neutral} className="logo"/>
+      </>
+    )
   }
-  if (resultState == "Negative") {
-    content = 
-    <div>
-      <ResultText resultState={resultState} queryDisplayState={queryDisplayState}></ResultText>
-      <img src={negative} className="logo"/>
-    </div>
+  else if(resultState == "error") {
+    content = (
+      <>
+        <img src={error} className="logo"/>
+      </>
+    )
   }
-  return (
-    <>
-    {content}
-    </>
-  )
+  else{
+    content = (
+      <>
+        <img src={not_rated} className="logo"/>
+      </>
+    )
+  }
+  return content
 }
 
 function InputContainer({setResultState, setQueryDisplayState}) {
@@ -103,8 +138,6 @@ function InputContainer({setResultState, setQueryDisplayState}) {
     console.log(x)
     const result = sentimenList[x]
     return result
-    
-    
   }
 
   async function sendQuery() {
@@ -117,9 +150,10 @@ function InputContainer({setResultState, setQueryDisplayState}) {
   }
   return (
     <>
-      <div>
-        <h1>Input</h1>
-        <input type='text' value={inputState} onChange={handleTextAreaChange}></input>
+      <div className='textInput'>
+          <input type='text' value={inputState} onChange={handleTextAreaChange}></input>
+      </div>
+      <div className='inputButton'>
         <button onClick={sendQuery}>Send</button>
       </div>
     </>
