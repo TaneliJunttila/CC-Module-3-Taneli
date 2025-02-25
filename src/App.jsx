@@ -1,33 +1,159 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import positive from './assets/Positive.png'
+import negative from './assets/Negative.png'
+import neutral from './assets/Neutral.png'
+import error from './assets/error.png'
+import not_rated from './assets/not_rated.png'
 import './App.css'
-
 function App() {
-  const [count, setCount] = useState(0)
+  const [resultState, setResultState] = useState('nothing_sent')
+  const [queryDisplayState, setQueryDisplayState] = useState('')
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="appRoot">
+        <div className='headline'>
+          <h1>Sentiment analysis frontend</h1>
+        </div>
+        <div className='image'>
+          <ResultImage resultState={resultState}></ResultImage>
+        </div>
+        <div className='queryText'>
+          <ResultQueryText resultState={resultState} queryDisplayState={queryDisplayState}></ResultQueryText>
+        </div>
+        <InputContainer setResultState={setResultState} setQueryDisplayState={setQueryDisplayState}/>
+        <div className='resultText'>
+          <ResultText resultState={resultState}></ResultText>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+    </>
+  )
+}
+
+function ResultQueryText({resultState, queryDisplayState}) {
+  let content
+  if(resultState == "nothing_sent") {
+    content = (
+      <>
+        <h3>
+          Send something for sentiment analysis
+        </h3>
+      </>
+    )
+  }
+  else {
+    content = (
+      <>
+        <h3>
+          Sentiment for query:
+        </h3>
+      </>
+    )
+  }
+  return content
+
+}
+function ResultText({resultState}) {
+  let content
+  if(resultState == "sending...") {
+    content = (
+      <>
+        <h2> Checking sentiment... </h2>
+      </>
+    )
+  }
+  else if(resultState == "nothing_sent") {
+    content = (
+      <>
+        <h2>Nothing sent</h2>
+      </>
+    )
+  }
+  else {
+    content = (
+      <>
+        <h2>is {resultState}</h2>
+      </>
+    )
+  }
+  return content
+}
+
+function ResultImage({resultState}) {
+  let content
+  if(resultState == "Positive") {
+    content = (
+      <>
+        <img src={positive} className="logo"/>
+      </>
+    )
+  }
+  else if(resultState == "Negative") {
+    content = (
+      <>
+        <img src={negative} className="logo"/>
+      </>
+    )
+  }
+  else if(resultState == "Neutral") {
+    content = (
+      <>
+        <img src={neutral} className="logo"/>
+      </>
+    )
+  }
+  else if(resultState == "error") {
+    content = (
+      <>
+        <img src={error} className="logo"/>
+      </>
+    )
+  }
+  else{
+    content = (
+      <>
+        <img src={not_rated} className="logo"/>
+      </>
+    )
+  }
+  return content
+}
+
+function InputContainer({setResultState, setQueryDisplayState}) {
+  const [inputState, setInputState] = useState('')
+
+  function handleTextAreaChange(e) {
+    setInputState(e.target.value)
+  }
+  function randomSentiment() {
+    const sentimenList = [
+      "Positive",
+      "Neutral",
+      "Negative"
+    ]
+    // https://www.w3schools.com/jsref/jsref_random.asp
+    const x = Math.floor(Math.random() * sentimenList.length)
+    console.log(x)
+    const result = sentimenList[x]
+    return result
+  }
+
+  async function sendQuery() {
+    setQueryDisplayState(inputState)
+    setResultState("sending...")
+    // Stack Overflow: https://stackoverflow.com/questions/14226803/wait-5-seconds-before-executing-next-line
+    await new Promise( r => setTimeout(r, 3000))
+    const result = randomSentiment()
+    setResultState(result)
+  }
+  return (
+    <>
+      <div className='textInput'>
+          <input type='text' value={inputState} onChange={handleTextAreaChange}></input>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className='inputButton'>
+        <button onClick={sendQuery}>Send</button>
+      </div>
     </>
   )
 }
