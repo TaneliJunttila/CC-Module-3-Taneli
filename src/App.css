@@ -36,7 +36,9 @@
     max-width: 100%;
     padding: 1.5em;
   }
-  /* I have a div with a classname querytext and inside 
+  /*
+  Copilot:
+   I have a div with a classname querytext and inside 
   it is a h3 with the name queryContainer. The querytext div has a max size. 
   I would like it to be so that if querycontainer text is larger 
   than what fits the div, it would create a scroll. */
