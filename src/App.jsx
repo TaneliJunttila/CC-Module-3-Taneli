@@ -2,8 +2,8 @@ import { useState } from 'react'
 import positive from './assets/Positive.png'
 import negative from './assets/Negative.png'
 import neutral from './assets/Neutral.png'
-import error from './assets/error.png'
-import not_rated from './assets/not_rated.png'
+import error from './assets/Error.png'
+import not_rated from './assets/Not_rated.png'
 import './App.css'
 function App() {
   const [resultState, setResultState] = useState('nothing_sent')
