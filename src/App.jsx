@@ -81,21 +81,21 @@ function ResultText({resultState}) {
 
 function ResultImage({resultState}) {
   let content
-  if(resultState == "Positive") {
+  if(resultState == "positive") {
     content = (
       <>
         <img src={positive} className="logo"/>
       </>
     )
   }
-  else if(resultState == "Negative") {
+  else if(resultState == "negative") {
     content = (
       <>
         <img src={negative} className="logo"/>
       </>
     )
   }
-  else if(resultState == "Neutral") {
+  else if(resultState == "neutral") {
     content = (
       <>
         <img src={neutral} className="logo"/>
@@ -127,9 +127,9 @@ function InputContainer({setResultState, setQueryDisplayState}) {
   }
   function randomSentiment() {
     const sentimenList = [
-      "Positive",
-      "Neutral",
-      "Negative"
+      "positive",
+      "neutral",
+      "negative"
     ]
     // https://www.w3schools.com/jsref/jsref_random.asp
     const x = Math.floor(Math.random() * sentimenList.length)
@@ -141,10 +141,29 @@ function InputContainer({setResultState, setQueryDisplayState}) {
   async function sendQuery() {
     setQueryDisplayState(inputState)
     setResultState("sending...")
-    // Stack Overflow: https://stackoverflow.com/questions/14226803/wait-5-seconds-before-executing-next-line
-    await new Promise( r => setTimeout(r, 3000))
-    const result = randomSentiment()
-    setResultState(result)
+    // https://www.w3schools.com/jsref/jsref_try_catch.asp
+    try {
+      await fetch("https://cc-module-4-backend-cloud-computing-2025-taneli.2.rahtiapp.fi/predict", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        
+        body: JSON.stringify({
+          prediction: inputState.toString()
+        }),
+      }).then(response => {
+        return response.json();
+      }
+      ).then(data => {
+        setResultState(data['Verdict'])
+      })
+    }
+    catch(err) {
+      setResultState("error")
+      alert(err)
+    }
   }
   return (
     <>
