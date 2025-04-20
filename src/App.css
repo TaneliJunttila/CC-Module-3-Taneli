@@ -13,7 +13,8 @@
     'resultText'
     'image'
     'textInput'
-    'inputButton';
+    'inputButton'
+    'historyContainer';
     gap: 10px 10px;
     justify-items: center;
     
@@ -64,6 +65,25 @@
     
     
   }
+  .historyContainer {
+    max-width: 40%;
+    min-width: 40%;
+    overflow-wrap:anywhere;
+    overflow: scroll;
+    background-color: grey;
+    border-style: solid;
+    margin: 3%;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+    
+  }
+  li {
+    border-style: solid;
+  
+  }
+  
 
 }
 
@@ -76,6 +96,7 @@
     'queryText queryText'
     'textInput inputButton'
     'resultText resultText'
+    'historyContainer historyContainer'
     ;
     gap: 10px 10px;
     justify-items: center;
@@ -125,12 +146,32 @@
     
     
   }
+  .historyContainer {
+    max-width: 40%;
+    min-width: 40%;
+    overflow-wrap:anywhere;
+    overflow: scroll;
+    background-color: grey;
+    border-style: solid;
+    margin: 3%;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+    
+  }
+  li {
+    border-style: solid;
+  
+  }
+  
 
 }
 
 button{
-  padding: 30%;
+  padding: 5%;
   background-color: rgba(25, 25, 122, 0.651);
+  max-width: fit-content;
 }
 input{
   padding: 5%;

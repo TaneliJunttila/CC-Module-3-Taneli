@@ -8,6 +8,7 @@ import './App.css'
 function App() {
   const [resultState, setResultState] = useState('nothing_sent')
   const [queryDisplayState, setQueryDisplayState] = useState('')
+  const [historyItemList, setHistoryItemList] = useState([])
 
   return (
     <>
@@ -25,9 +26,81 @@ function App() {
         <div className='resultText'>
           <ResultText resultState={resultState}></ResultText>
         </div>
+        <div className='historyContainer'>
+          <HistoryContainer historyItemList={historyItemList} setHistoryItemList={setHistoryItemList}></HistoryContainer>
+        </div>
       </div>
     </>
   )
+}
+
+function HistoryContainer({historyItemList, setHistoryItemList}) {
+  async function getHistory() {
+    try {
+      await fetch("https://cc-module-5-taneli-private-cloud-computing-2025-taneli.2.rahtiapp.fi/history", {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }).then(response => {
+        return response.json();
+      }
+      ).then(data => {
+        setHistoryItemList(data)
+      })
+    }
+    catch(err) {
+      alert(err)
+    }
+  }
+  async function deleteHistory() {
+    try {
+      await fetch("https://cc-module-5-taneli-private-cloud-computing-2025-taneli.2.rahtiapp.fi/history", {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }).then(response => {
+        getHistory()
+        return response.json();
+      })
+    }
+    catch(err) {
+      alert(err)
+    }
+  }
+
+  let content = (
+    <>
+    <h3>History</h3>
+    <div className='refreshButton'>
+        <button onClick={getHistory}>Refresh</button>
+    </div>
+    <div className='refreshButton'>
+        <button onClick={deleteHistory}>Delete History</button>
+    </div>
+    <div>
+      <HistoryList historyItemList={historyItemList}></HistoryList>
+    </div>
+    
+    </>
+  )
+
+  return content
+}
+
+function HistoryList({historyItemList}) {
+  const listItems = historyItemList.map(historyItem => 
+    <li>
+      <h4>
+        Query: {[historyItem.query]}
+      </h4>
+      <h6>
+        Answer: {[historyItem.result]}
+      </h6>
+    </li>
+  )
+  return <ul>{listItems}</ul>
 }
 
 function ResultQueryText({resultState, queryDisplayState}) {
@@ -143,7 +216,7 @@ function InputContainer({setResultState, setQueryDisplayState}) {
     setResultState("sending...")
     // https://www.w3schools.com/jsref/jsref_try_catch.asp
     try {
-      await fetch("https://cc-module-4-backend-cloud-computing-2025-taneli.2.rahtiapp.fi/predict", {
+      await fetch("https://cc-module-5-taneli-private-cloud-computing-2025-taneli.2.rahtiapp.fi/predict", {
         method: "POST",
         mode: "cors",
         headers: {
